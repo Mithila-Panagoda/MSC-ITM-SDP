@@ -16,7 +16,6 @@ schema_view = swagger_get_shema_view(
     ),
     public=settings.IS_SWAGGER_ENABLED,
 )
-print("IS_SWAGGER_ENABLED",settings.IS_SWAGGER_ENABLED)
 
 
 urlpatterns = [

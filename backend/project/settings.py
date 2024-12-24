@@ -57,7 +57,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-vh78xc#tos6$d1lfehst3(4($nr6xc_ap4jr&+!^r+vvyo#4gl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', True) == 'True'
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = ['localhost', os.environ.get('APP_HOST', ''), "*"]
 # Application definition
@@ -215,3 +215,5 @@ if DEBUG and not OVERRIDE_DEFAULT_STORAGE_IN_DEBUG and not DEFAULT_STORAGE == 'D
 #         },
 #     }
 # }
+
+print("DEBUG:",DEBUG)
