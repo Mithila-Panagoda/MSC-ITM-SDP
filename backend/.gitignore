@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.idea
+/media/
+.pytest_cache
+myenv/
+.env
+.env.*
