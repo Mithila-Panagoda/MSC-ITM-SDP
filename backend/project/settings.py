@@ -215,5 +215,3 @@ if DEBUG and not OVERRIDE_DEFAULT_STORAGE_IN_DEBUG and not DEFAULT_STORAGE == 'D
 #         },
 #     }
 # }
-
-print("DEBUG:",DEBUG)
