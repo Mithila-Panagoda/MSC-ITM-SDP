@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path,include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view as swagger_get_shema_view
-
+from django.conf import settings
 
 schema_view = swagger_get_shema_view(
     openapi.Info(
@@ -14,9 +14,9 @@ schema_view = swagger_get_shema_view(
         contact=openapi.Contact(email="srilankanism@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
-    public=True,
+    public=settings.IS_SWAGGER_ENABLED,
 )
-
+print("IS_SWAGGER_ENABLED",settings.IS_SWAGGER_ENABLED)
 
 
 urlpatterns = [

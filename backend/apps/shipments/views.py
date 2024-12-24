@@ -10,4 +10,5 @@ from .serializer import(
 class ShipmentViewSet(ReadOnlyModelViewSet):
     queryset = Shipment.objects.all()
     serializer_class = ShipmentSerializer
+    tags = ['Shipment']
     
