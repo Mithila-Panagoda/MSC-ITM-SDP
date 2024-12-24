@@ -11,8 +11,8 @@ schema_view = swagger_get_shema_view(
         default_version='v1',
         description="This APi doc contains api docs for the shipment managment system",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="srilankanism@gmail.com"),
-        license=openapi.License(name="BSD License"),
+        contact=openapi.Contact(email="mithilapanagoda@gmail.com"),
+
     ),
     public=settings.IS_SWAGGER_ENABLED,
 )
