@@ -7,9 +7,9 @@ from drf_yasg.views import get_schema_view as swagger_get_shema_view
 
 schema_view = swagger_get_shema_view(
     openapi.Info(
-        title="Sri Lankanism api docs",
+        title="ITM-SDP-Assigment",
         default_version='v1',
-        description="Sri Lankanism api docs",
+        description="This APi doc contains api docs for the shipment managment system",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="srilankanism@gmail.com"),
         license=openapi.License(name="BSD License"),
@@ -17,8 +17,22 @@ schema_view = swagger_get_shema_view(
     public=True,
 )
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+apps=[
+    'apps.shipments',
+]
+
+for app in apps:
+    try:
+        urlpatterns.append(path('api/', include(f'{app}.urls')))
+    except ImportError as e:
+        print(f"WARNING:{e}.")
+        
+        
