@@ -18,6 +18,34 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', '')
 dotenv_path = ".env" + (f".{ENVIRONMENT}" if ENVIRONMENT else "")
 load_dotenv(dotenv_path=dotenv_path, verbose=True, override=True)
 
+#Swagger
+IS_SWAGGER_ENABLED = os.getenv('IS_SWAGGER_ENABLED', "false").lower() == 'true'
+SWAGGER_ADMIN_LOGIN_ENABLED = os.environ.get('SWAGGER_ADMIN_LOGIN_ENABLED', "false").lower() == 'true'
+SWAGGER_SETTINGS = {
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'project.swagger_config.SwaggerAutoSchema',
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'SECURITY_REQUIREMENTS': [
+        {
+            'Bearer': []
+        }
+    ],
+    'USE_SESSION_AUTH': SWAGGER_ADMIN_LOGIN_ENABLED,
+    'JSON_EDITOR': True,
+    'SHOW_REQUEST_HEADERS': True,
+    'SUPPORTED_SUBMIT_METHODS': ['get', 'post', 'put', 'delete', 'patch'],
+    'DOC_EXPANSION': 'none',
+    'APIS_SORTER': 'alpha',
+    'OPERATIONS_SORTER': 'alpha',
+    'LOGIN_URL': 'admin:login',
+    'LOGOUT_URL': 'admin:logout',
+    'DEFAULT_MODEL_RENDERING': 'example'
+}
 from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +76,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +84,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -154,3 +182,36 @@ if DEBUG and not OVERRIDE_DEFAULT_STORAGE_IN_DEBUG and not DEFAULT_STORAGE == 'D
         Please set 'DJANGO_OVERRIDE_DEFAULT_STORAGE_IN_DEBUG' to True if you need to test external storage.
         '''
     )
+# import sys    
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+#             'datefmt' : "%d/%b/%Y %H:%M:%S"
+#         },
+#         'simple': {
+#             'format': '%(levelname)s %(message)s'
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'stream': sys.stdout,
+#             'formatter': 'verbose'
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers':['console'],
+#             'propagate': True,
+#             'level':'DEBUG',
+#         },
+#         'MYAPP': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     }
+# }
