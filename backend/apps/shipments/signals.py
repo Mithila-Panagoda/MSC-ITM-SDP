@@ -10,7 +10,7 @@ def update_shipment_status(sender, instance, **kwargs):
     previous_status = shipment.status
     shipment.status = instance.status
     
-    if shipment.status == ShipmentStatues.DELIVERED:
+    if previous_status == ShipmentStatues.DELIVERED:
         raise ValueError('Cannot update a delivered shipment.')
     
     if previous_status == shipment.status:

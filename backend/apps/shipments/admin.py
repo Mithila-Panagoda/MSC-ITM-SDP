@@ -30,3 +30,11 @@ class ShipmentUpdateAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, _request, _obj=None):
         return False
+    
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.save()
+        except ValueError as e:
+            print(e)
+            self.message_user(request, str(e), level='ERROR')
+            obj.delete()
