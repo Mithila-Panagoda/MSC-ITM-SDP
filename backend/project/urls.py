@@ -9,7 +9,15 @@ schema_view = swagger_get_shema_view(
     openapi.Info(
         title="ITM-SDP-Assigment",
         default_version='v1',
-        description="This APi doc contains api docs for the shipment managment system",
+        description="""
+        API documentation for Shipment updates.
+
+        ## WebSocket Endpoint
+        - **URL**: `ws://<your-domain>/ws/shipment-updates/{tracking_id}/`
+        - **Description**: Connect to this WebSocket endpoint to receive real-time shipment updates.
+        - **Parameters**:
+            - `tracking_id`: The ID of the shipment to receive updates for.
+        """,
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="mithilapanagoda@gmail.com"),
 
