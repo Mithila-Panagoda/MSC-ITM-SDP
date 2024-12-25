@@ -27,8 +27,6 @@ class ShipmentUpdateAdmin(admin.ModelAdmin):
     search_fields = ('shipment__tracking_id','location')
     list_filter = ('status','created_at')
     readonly_fields = ('created_at',)
-    def has_delete_permission(self, request, obj=None):
-        return False
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(self, _request, _obj=None):
         return False

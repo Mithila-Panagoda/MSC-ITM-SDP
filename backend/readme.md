@@ -4,3 +4,6 @@
 3. `python manage.py migrate`
 4. `python manage.py createsuperuser`
 5. `python manage.py runserver` 
+
+### Run project with uvicron if the websocket is to be used <-- for realtime shipment updates
+ex: `uvicorn project.asgi:application --host 127.0.0.1 --port 8000`
