@@ -34,6 +34,7 @@ urlpatterns = [
 
 apps=[
     'apps.shipments',
+    'apps.users',
 ]
 
 for app in apps:

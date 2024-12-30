@@ -17,6 +17,7 @@ from .serializer import(
     CreateRescheduleSerializer
 )
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 from .services import(
     create_reschedule
@@ -25,6 +26,7 @@ from .services import(
 class ShipmentViewSet(ReadOnlyModelViewSet):
     queryset = Shipment.objects.all()
     serializer_class = ShipmentSerializer
+    permission_classes = [IsAuthenticated]
     tags = ['Shipment']
     
     def get_serializer_class(self):
@@ -36,12 +38,14 @@ class ShipmentViewSet(ReadOnlyModelViewSet):
 class ShipmentUpdateViewSet(ReadOnlyModelViewSet):
     queryset = ShipmentUpdate.objects.all()
     serializer_class = ShipmentUpdateSerializer
+    permission_classes = [IsAuthenticated]
     tags = ['ShipmentUpdate']
     
     
 class RescheduleViewSet(ModelViewSet):
     queryset = Reschedule.objects.all()
     serializer_class = RescheduleSerializer
+    permission_classes = [IsAuthenticated]
     tags = ['Reschedule']
     
     def get_serializer_class(self):
