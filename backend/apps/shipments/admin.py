@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import (
     Shipment,
-    ShipmentUpdate
+    ShipmentUpdate,
+    Reschedule,
 )
 
 @admin.register(Shipment)
@@ -12,14 +13,14 @@ class ShipmentAdmin(admin.ModelAdmin):
     list_filter = ('status','created_at')
     readonly_fields = ('tracking_id','created_at','updated_at')
 
-    def has_add_permission(self, request):
-        return False
+    # def has_add_permission(self, request):
+    #     return False
 
     def has_change_permission(self, request, obj=None):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
 
 @admin.register(ShipmentUpdate)
 class ShipmentUpdateAdmin(admin.ModelAdmin):
@@ -38,3 +39,19 @@ class ShipmentUpdateAdmin(admin.ModelAdmin):
             print(e)
             self.message_user(request, str(e), level='ERROR')
             obj.delete()
+            
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.order_by('-created_at')
+            
+            
+@admin.register(Reschedule)  
+class RescheduleAdmin(admin.ModelAdmin):
+    list_display = ('id','shipment','new_delivery_date','status')
+    search_fields = ('shipment__tracking_id','new_delivery_date')
+    list_filter = ('status','new_delivery_date')
+    readonly_fields = ('created_at','custom_instructions','new_delivery_date')
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.order_by('-created_at')
