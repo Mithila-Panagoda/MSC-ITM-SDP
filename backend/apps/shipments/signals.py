@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import ShipmentUpdate,ShipmentStatues
+from .models import ShipmentUpdate,ShipmentStatues,Reschedule,RescheduleStatues
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
@@ -28,3 +28,15 @@ def update_shipment_status(sender, instance, **kwargs):
             'location': instance.location,
         }
     )
+    
+@receiver(post_save, sender=Reschedule)
+def accept_or_reject_reschedule(sender, instance, **kwargs):
+    shipment = instance.shipment
+    if instance.status == RescheduleStatues.ACCEPTED:
+        ShipmentUpdate.objects.create(
+            shipment=shipment,
+            status=ShipmentStatues.PENDING,
+            location=instance.new_location
+        )
+        
+    #TODO: Send notification to customer and handle rejects

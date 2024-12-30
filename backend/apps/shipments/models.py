@@ -47,3 +47,21 @@ class ShipmentUpdate(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return str(self.id)
+    
+    
+class RescheduleStatues(models.TextChoices):
+    PENDING = 'PENDING', 'Pending'
+    ACCEPTED = 'ACCEPTED', 'Accepted'
+    REJECTED = 'REJECTED', 'Rejected'
+class Reschedule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    shipment = models.OneToOneField(Shipment, on_delete=models.CASCADE, related_name='reschedules')
+    new_delivery_date = models.DateField()
+    new_location = models.CharField(max_length=100, blank=True,null=True)
+    custom_instructions = models.TextField(blank=True,null=True)
+    admin_response = models.TextField(blank=True,null=True)
+    status = models.CharField(max_length=20, choices=RescheduleStatues.choices,default=RescheduleStatues.PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.id)

@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from .models import Shipment,ShipmentUpdate
+from .models import (
+    Shipment,
+    ShipmentUpdate,
+    Reschedule,
+)
 
 class ShipmentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,4 +27,12 @@ class ShipmentSerializer(serializers.ModelSerializer):
         
 
         
-    
+class RescheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reschedule
+        fields = "__all__"
+        
+class CreateRescheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reschedule
+        fields = ['new_delivery_date', 'custom_instructions','new_location']
