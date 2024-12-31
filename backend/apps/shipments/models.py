@@ -65,3 +65,46 @@ class Reschedule(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return str(self.id)
+    
+class Notification(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    shipment = models.OneToOneField(Shipment, on_delete=models.CASCADE, related_name='notifications')
+    send_email = models.BooleanField(default=True)
+    send_sms = models.BooleanField(default=False)
+    send_push_notification = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.id)
+
+    
+class NotificationStatus(models.TextChoices):
+    PENDING = 'PENDING', 'Pending'
+    SENT = 'SENT', 'Sent'
+    FAILED = 'FAILED', 'Failed'
+    USER_NOT_SUBSCRIBED = 'USER_NOT_SUBSCRIBED', 'User not subscribed'
+class NotificationMessage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='messages')
+    message = models.TextField()
+    email_status = models.CharField(max_length=20, choices=NotificationStatus.choices, default=NotificationStatus.PENDING)
+    sms_status = models.CharField(max_length=20, choices=NotificationStatus.choices, default=NotificationStatus.PENDING)
+    push_notification_status = models.CharField(max_length=20, choices=NotificationStatus.choices, default=NotificationStatus.PENDING)
+    email_sent_at = models.DateTimeField(blank=True, null=True)
+    sms_sent_at = models.DateTimeField(blank=True, null=True)
+    push_notification_sent_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)
+    class Meta:
+        ordering = ['-created_at']
+        
+    def save(self, *args, **kwargs):
+        if not self.notification.send_email:
+            self.email_status = NotificationStatus.USER_NOT_SUBSCRIBED
+        if not self.notification.send_sms:
+            self.sms_status = NotificationStatus.USER_NOT_SUBSCRIBED
+        if not self.notification.send_push_notification:
+            self.push_notification_status = NotificationStatus.USER_NOT_SUBSCRIBED
+        super().save(*args, **kwargs)

@@ -1,26 +1,30 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet,ModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet,ModelViewSet,ViewSet
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import APIException
 
-from django.http import StreamingHttpResponse
 from .models import(
     Shipment,
     ShipmentUpdate,
     ShipmentStatues,
-    Reschedule
+    Reschedule,
+    Notification
 )
 from .serializer import(
     ShipmentSerializer,
     ShipmentUpdateSerializer,
     ShipmentDetailSerializer,
     RescheduleSerializer,
-    CreateRescheduleSerializer
+    CreateRescheduleSerializer,
+    NotificationSerializer,
+    UpdateNotificationSerializer,
 )
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from .services import(
-    create_reschedule
+    create_reschedule,
+    update_notification_methods
 )
 
 class ShipmentViewSet(ReadOnlyModelViewSet):
@@ -65,3 +69,33 @@ class RescheduleViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         result = create_reschedule(shipment_instance, serializer.validated_data)
         return Response(RescheduleSerializer(result).data, status=status.HTTP_201_CREATED)
+    
+class NotificationViewSet(ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    tags = ['NotificationMethod']
+    
+    def get_serializer_class(self):
+        if self.action == 'partial_update':
+            return UpdateNotificationSerializer
+        return NotificationSerializer
+    
+    def list(self, request, *args, **kwargs):
+        raise APIException("Cannot list all notifications")
+    
+    def create(self, request, *args, **kwargs):
+        raise APIException("Cannot create notifications")
+    
+    def destroy(self, request, *args, **kwargs):
+        raise APIException("Cannot delete notifications")
+    
+    def update(self, request, *args, **kwargs):
+        raise APIException("Cannot update notifications")
+    
+    def partial_update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        notification_instance = get_object_or_404(Notification, id=kwargs.get('shipment_pk'))
+        result = update_notification_methods(notification_instance, serializer.validated_data)
+        return Response(NotificationSerializer(result).data,status=status.HTTP_200_OK)

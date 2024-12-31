@@ -1,8 +1,13 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import ShipmentUpdate,ShipmentStatues,Reschedule,RescheduleStatues
+from .models import Shipment,ShipmentUpdate,ShipmentStatues,Reschedule,RescheduleStatues,Notification,NotificationMessage
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+
+@receiver(post_save, sender=Shipment)
+def create_notification(sender, instance, created, **kwargs):
+    if created:
+        Notification.objects.create(shipment=instance)
 
 @receiver(post_save, sender=ShipmentUpdate)
 def update_shipment_status(sender, instance, **kwargs):
@@ -29,6 +34,13 @@ def update_shipment_status(sender, instance, **kwargs):
         }
     )
     
+    notification_for_shipment = Notification.objects.filter(shipment=shipment).first()
+    notification_message = NotificationMessage(
+        notification=notification_for_shipment,
+        message=f'Your shipment status has been updated to {instance.status}'
+    )
+    notification_message.save()
+    
 @receiver(post_save, sender=Reschedule)
 def accept_or_reject_reschedule(sender, instance, **kwargs):
     shipment = instance.shipment
@@ -40,3 +52,16 @@ def accept_or_reject_reschedule(sender, instance, **kwargs):
         )
         
     #TODO: Send notification to customer and handle rejects
+    
+    
+@receiver(post_save, sender=NotificationMessage)
+def send_notification(sender, instance, created, **kwargs):
+    if created:
+        notification = instance.notification
+        if notification.send_email:
+            print(f'Sending email to {notification.shipment.customer.email} \n Message: {instance.message}')
+            pass #TODO: connect to email service
+        if notification.send_sms:
+            pass
+        if notification.send_push_notification:
+            pass

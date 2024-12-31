@@ -3,7 +3,9 @@ from .models import(
     ShipmentUpdate,
     ShipmentStatues,
     Reschedule,
-    RescheduleStatues
+    RescheduleStatues,
+    Notification,
+    NotificationMessage
 )
 
 from rest_framework.exceptions import APIException
@@ -23,3 +25,9 @@ def create_reschedule(shipment: Shipment, reschedule_data: dict) -> Reschedule:
         }
     )
     return reschedule
+
+def update_notification_methods(notification: Notification, data: dict) -> Notification:
+    for key, value in data.items():
+        setattr(notification, key, value)
+    notification.save()
+    return notification
