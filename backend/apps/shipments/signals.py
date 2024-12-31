@@ -1,8 +1,10 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Shipment,ShipmentUpdate,ShipmentStatues,Reschedule,RescheduleStatues,Notification,NotificationMessage
+from .models import Shipment,ShipmentUpdate,ShipmentStatues,Reschedule,RescheduleStatues,Notification,NotificationMessage,NotificationStatus
 from asgiref.sync import async_to_sync
+from django.utils import timezone
 from channels.layers import get_channel_layer
+from .services import prep_email_for_shipment_status_update,send_email,prep_email_for_reschedule
 
 @receiver(post_save, sender=Shipment)
 def create_notification(sender, instance, created, **kwargs):
@@ -51,16 +53,38 @@ def accept_or_reject_reschedule(sender, instance, **kwargs):
             location=instance.new_location
         )
         
-    #TODO: Send notification to customer and handle rejects
+    if instance.status != RescheduleStatues.PENDING:
+        html_message, _ = prep_email_for_reschedule(instance)
+        try:
+            send_email(
+                subject='Reschedule Status',
+                recipient_list=[shipment.customer.email],
+                html_message=html_message,
+            )
+        except Exception as e:
+            pass
     
     
 @receiver(post_save, sender=NotificationMessage)
 def send_notification(sender, instance, created, **kwargs):
     if created:
         notification = instance.notification
+        
+        if notification.shipment.status == ShipmentStatues.PENDING and notification.shipment.reschedules.status==RescheduleStatues.ACCEPTED:
+            return  # Do not send email if shipment is pending and there is an accepted reschedule request
+        
         if notification.send_email:
-            print(f'Sending email to {notification.shipment.customer.email} \n Message: {instance.message}')
-            pass #TODO: connect to email service
+            html_message, _ = prep_email_for_shipment_status_update(notification.shipment, notification.shipment.updates.order_by('-created_at').first())
+            try:
+                send_email(
+                    subject='Shipment Status Update',
+                    recipient_list=[notification.shipment.customer.email],
+                    html_message=html_message,  
+                )
+                instance.email_status = NotificationStatus.SENT
+            except Exception as e:
+                instance.email_status = NotificationStatus.FAILED
+            instance.save()
         if notification.send_sms:
             pass
         if notification.send_push_notification:
