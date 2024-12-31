@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reschedule Request Rejected</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            background-color: #d9534f;
+            color: #ffffff;
+            padding: 20px 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+            color: #444444;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .content .status {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d9534f;
+            margin-top: 20px;
+        }
+        .action {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .action a {
+            background-color: #d9534f;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .action a:hover {
+            background-color: #c9302c;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px 10px;
+            background-color: #f7f7f7;
+            border-top: 1px solid #dddddd;
+            color: #777777;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #d9534f;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Reschedule Request Rejected</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ customer_name }},</p>
+            <p>We regret to inform you that your request to reschedule your shipment has been rejected.</p>
+            <p class="status">Current Status: Reschedule Request Rejected</p>
+            <p>Your tracking ID is:</p>
+            <p class="tracking-id">{{ tracking_id }}</p>
+            <p>If you believe this was an error or would like to reschedule with a different date, please visit our <a href="{{ reschedule_url }}" target="_blank">reschedule page</a> to submit a new request.</p>
+            <p>Alternatively, you can contact our support team for further assistance:</p>
+            <div class="action">
+                <a href="{{ support_url }}" target="_blank">Contact Support</a>
+            </div>
+            <p>We apologize for any inconvenience this may have caused and are here to help resolve this matter promptly.</p>
+            <p>Sincerely,</p>
+            <p><strong>The Shipping Team</strong></p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2023 Shipping Company. All rights reserved. | <a href="{{ privacy_policy_url }}">Privacy Policy</a> | <a href="{{ contact_url }}">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>

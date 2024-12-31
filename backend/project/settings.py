@@ -102,7 +102,9 @@ AUTH_USER_MODEL = 'users.User'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'apps', 'shipments', 'email_templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -190,6 +192,18 @@ if DEBUG and not OVERRIDE_DEFAULT_STORAGE_IN_DEBUG and not DEFAULT_STORAGE == 'D
         Please set 'DJANGO_OVERRIDE_DEFAULT_STORAGE_IN_DEBUG' to True if you need to test external storage.
         '''
     )
+    
+#Email service
+EMAIL_BACKEND = os.getenv('DJANGO_EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'localhost')
+EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', 587)
+EMAIL_USE_TLS = os.getenv('DJANGO_EMAIL_USE_TLS', True)
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', 'mithilapanagoda@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD')
+
+#FE
+WEBAPP_URL = os.getenv('WEBAPP_URL', 'http://localhost:3000')
+
 # import sys    
 # LOGGING = {
 #     'version': 1,

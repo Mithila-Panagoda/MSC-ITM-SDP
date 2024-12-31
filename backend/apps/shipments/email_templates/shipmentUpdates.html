@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Status Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaf4fc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            background-color: #0077cc;
+            color: #ffffff;
+            padding: 20px 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+            color: #444444;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .content .status {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0077cc;
+            margin-top: 20px;
+        }
+        .tracking-id {
+            font-size: 16px;
+            color: #444444;
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px 10px;
+            background-color: #f7f7f7;
+            border-top: 1px solid #dddddd;
+            color: #777777;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Shipping Status Update</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ customer_name }},</p>
+            <p>We are excited to share an update regarding your shipment!</p>
+            <p class="status">Current Status: {{ shipment_status }}</p>
+            <p>Your tracking ID is:</p>
+            <p class="tracking-id">{{ tracking_id }}</p>
+            <p>Feel free to use this tracking ID to monitor your shipment’s progress on our <a href="{{ tracking_url }}" target="_blank">website</a>.</p>
+            <p>Thank you for choosing our service. We value your trust and strive to deliver excellence every step of the way!</p>
+            <p>Warm regards,</p>
+            <p><strong>The Shipping Team</strong></p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2023 Shipping Company. All rights reserved. | <a href="{{ privacy_policy_url }}">Privacy Policy</a> | <a href="{{ contact_url }}">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>
