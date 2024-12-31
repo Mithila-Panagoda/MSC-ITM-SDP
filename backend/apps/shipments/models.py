@@ -21,7 +21,7 @@ class Shipment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f'{self.id} - {self.customer.email}'
+        return f'{self.tracking_id} - {self.customer.email}'
 
     def save(self, *args, **kwargs):
         if not self.tracking_id:

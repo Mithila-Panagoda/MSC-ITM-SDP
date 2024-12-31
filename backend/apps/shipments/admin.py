@@ -10,7 +10,7 @@ from .models import (
 
 @admin.register(Shipment)
 class ShipmentAdmin(admin.ModelAdmin):
-    list_display = ('id','tracking_id','customer','status','created_at','updated_at')
+    list_display = ('tracking_id','customer','status','created_at','updated_at')
     search_fields = ('tracking_id','customer__email')
     list_filter = ('status','created_at')
     readonly_fields = ('tracking_id','created_at','updated_at')
