@@ -4,6 +4,8 @@ from .models import (
     Shipment,
     ShipmentUpdate,
     Reschedule,
+    Notification,
+    NotificationMessage
 )
 
 @admin.register(Shipment)
@@ -55,3 +57,22 @@ class RescheduleAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.order_by('-created_at')
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('id','shipment','send_email','send_sms','send_push_notification')
+    search_fields = ('shipment__tracking_id','send_email','send_sms','send_push_notification')
+    list_filter = ('send_email','send_sms','send_push_notification')
+    readonly_fields = ('created_at','updated_at')
+
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = []
+        if obj is not None:
+            inline_instance = NotificationMessageInline(self.model, self.admin_site)
+            inline_instances.append(inline_instance)
+        return inline_instances
+
+class NotificationMessageInline(admin.TabularInline):
+    model = NotificationMessage
+    extra = 0
+    readonly_fields = ('email_status','sms_status','push_notification_status','message', 'created_at','email_sent_at','sms_sent_at','push_notification_sent_at')

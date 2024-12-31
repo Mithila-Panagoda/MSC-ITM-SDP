@@ -3,6 +3,8 @@ from .models import (
     Shipment,
     ShipmentUpdate,
     Reschedule,
+    Notification,
+    NotificationMessage
 )
 
 class ShipmentUpdateSerializer(serializers.ModelSerializer):
@@ -36,3 +38,21 @@ class CreateRescheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reschedule
         fields = ['new_delivery_date', 'custom_instructions','new_location']
+        
+class NotificationMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotificationMessage
+        fields = "__all__"
+class NotificationSerializer(serializers.ModelSerializer):
+    messages = NotificationMessageSerializer(many=True)
+    class Meta:
+        model = Notification
+        fields = "__all__"
+        
+class UpdateNotificationSerializer(serializers.ModelSerializer):
+    send_email = serializers.BooleanField(required=False)
+    send_sms = serializers.BooleanField(required=False)
+    send_push_notification = serializers.BooleanField(required=False)
+    class Meta:
+        model = Notification
+        fields = ['send_email','send_sms','send_push_notification']
