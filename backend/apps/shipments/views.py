@@ -39,15 +39,18 @@ class ShipmentViewSet(ReadOnlyModelViewSet):
         elif self.action == 'retrieve':
             return ShipmentDetailSerializer
         return ShipmentSerializer
+    
+    def get_queryset(self):
+        return Shipment.objects.filter(customer=self.request.user)
+    
 class ShipmentUpdateViewSet(ReadOnlyModelViewSet):
     queryset = ShipmentUpdate.objects.all()
     serializer_class = ShipmentUpdateSerializer
     permission_classes = [IsAuthenticated]
     tags = ['ShipmentUpdate']
     
-    
     def get_queryset(self):
-        return super().get_queryset()
+        return ShipmentUpdate.objects.filter(shipment_id=self.kwargs.get('shipment_pk'),shipment__customer=self.request.user)
     
 class RescheduleViewSet(ModelViewSet):
     queryset = Reschedule.objects.all()
@@ -68,6 +71,8 @@ class RescheduleViewSet(ModelViewSet):
 
         shipment_id= kwargs.get('shipment_pk')
         shipment_instance = get_object_or_404(Shipment, id=shipment_id)
+        if shipment_instance.customer != request.user:
+            raise APIException("Shipment does not belong to user")
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = create_reschedule(shipment_instance, serializer.validated_data)
@@ -100,5 +105,7 @@ class NotificationViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         notification_instance = get_object_or_404(Notification, id=kwargs.get('shipment_pk'))
+        if notification_instance.shipment.customer != request.user:
+            raise APIException("You are not authorized to update this notification method")
         result = update_notification_methods(notification_instance, serializer.validated_data)
         return Response(NotificationSerializer(result).data,status=status.HTTP_200_OK)
