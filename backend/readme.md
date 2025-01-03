@@ -13,3 +13,8 @@
 
 ### Run project with uvicron if the websocket is to be used <-- for realtime shipment updates
 ex: `uvicorn project.asgi:application --host 127.0.0.1 --port 8000`
+
+
+### Email service
+To Send emails to recipients with out printing it on console (dev work) add the following to .env
+`DJANGO_EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"`

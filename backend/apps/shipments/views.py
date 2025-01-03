@@ -46,6 +46,9 @@ class ShipmentUpdateViewSet(ReadOnlyModelViewSet):
     tags = ['ShipmentUpdate']
     
     
+    def get_queryset(self):
+        return super().get_queryset()
+    
 class RescheduleViewSet(ModelViewSet):
     queryset = Reschedule.objects.all()
     serializer_class = RescheduleSerializer
@@ -58,7 +61,7 @@ class RescheduleViewSet(ModelViewSet):
         return RescheduleSerializer
     
     def get_queryset(self):
-        shipment = get_object_or_404(Shipment, id=self.kwargs.get('shipment_pk'))
+        shipment = Shipment.objects.filter(id=self.kwargs.get('shipment_pk')).first()
         return Reschedule.objects.filter(shipment_id=shipment.id)
     
     def create(self, request, *args, **kwargs):
