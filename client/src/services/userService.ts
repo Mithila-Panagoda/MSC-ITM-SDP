@@ -13,7 +13,7 @@ export const login = async (email: string, password: string) => {
 
     const data = await response.json();
     const { access, refresh } = data;
-
+    console.log("access token: " + access);
     // Save tokens to localStorage
     localStorage.setItem('accessToken', access);
     localStorage.setItem('refreshToken', refresh);

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from .serializers import LoginSerializer, UserSerializer
 from .models import User
-
+from .permissions import AnonWriteOnly
 class UserViewSet(ReadOnlyModelViewSet):
     """
     A viewset for viewing and editing user instances.
@@ -17,6 +17,11 @@ class UserViewSet(ReadOnlyModelViewSet):
     tags = ['User']
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    
+    def get_permissions(self):
+        if self.action == 'login':
+            permission_classes = [AnonWriteOnly]
+        return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
         if self.action == 'login':

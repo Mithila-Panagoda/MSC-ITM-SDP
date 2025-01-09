@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
+
 ENVIRONMENT = os.getenv('ENVIRONMENT', '')
 #  Load the environment file based on the environment
 dotenv_path = ".env" + (f".{ENVIRONMENT}" if ENVIRONMENT else "")
@@ -137,9 +139,20 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    )
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=os.environ.get('SIMPLE_JWT_ACCESS_TOKEN_LIFETIME', 5)),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=os.environ.get('SIMPLE_JWT_REFRESH_TOKEN_LIFETIME', 30))
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
