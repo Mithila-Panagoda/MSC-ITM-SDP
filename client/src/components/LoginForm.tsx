@@ -3,21 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
+import { login } from "@/services/userService"; // Import the login function
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, validate credentials here
     if (email && password) {
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
-      });
-      navigate("/home");
+      try {
+        const user = await login(email, password);
+        console.log('Login successful:', user);
+        toast({
+          title: "Login successful",
+          description: "Welcome back!",
+        });
+        navigate("/home");
+      } catch (error) {
+        toast({
+          title: "Login Failed",
+          description: "Invalid username or password!",
+        });
+      }
     }
   };
 
