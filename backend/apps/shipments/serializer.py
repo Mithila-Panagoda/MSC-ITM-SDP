@@ -11,7 +11,6 @@ class ShipmentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShipmentUpdate
         fields = "__all__"
-
 class ShipmentDetailSerializer(serializers.ModelSerializer):
     updates = serializers.SerializerMethodField()
     class Meta:
@@ -22,11 +21,16 @@ class ShipmentDetailSerializer(serializers.ModelSerializer):
         updates = obj.updates.order_by('-created_at')
         return ShipmentUpdateSerializer(updates, many=True).data
     
+class SimpleNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = "__all__"
 class ShipmentSerializer(serializers.ModelSerializer):
+    notifications = SimpleNotificationSerializer()
+    
     class Meta:
         model = Shipment
         fields = "__all__"
-        
 
         
 class RescheduleSerializer(serializers.ModelSerializer):
