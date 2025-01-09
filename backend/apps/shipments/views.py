@@ -41,7 +41,7 @@ class ShipmentViewSet(ReadOnlyModelViewSet):
         return ShipmentSerializer
     
     def get_queryset(self):
-        return Shipment.objects.filter(customer=self.request.user)
+        return Shipment.objects.filter(customer=self.request.user).order_by('-created_at')
     
 class ShipmentUpdateViewSet(ReadOnlyModelViewSet):
     queryset = ShipmentUpdate.objects.all()
