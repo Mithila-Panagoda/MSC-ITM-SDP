@@ -17,10 +17,16 @@ class SimpleNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = "__all__"
+        
+class RescheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reschedule
+        fields = "__all__"
 
 class ShipmentDetailSerializer(serializers.ModelSerializer):
     notifications = SimpleNotificationSerializer()
     updates = serializers.SerializerMethodField()
+    reschedules = RescheduleSerializer()
     class Meta:
         model = Shipment
         fields = "__all__"
@@ -33,12 +39,6 @@ class ShipmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Shipment
-        fields = "__all__"
-
-        
-class RescheduleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reschedule
         fields = "__all__"
         
 class CreateRescheduleSerializer(serializers.ModelSerializer):

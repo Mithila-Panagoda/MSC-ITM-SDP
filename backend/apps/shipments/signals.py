@@ -51,7 +51,9 @@ def accept_or_reject_reschedule(sender, instance, **kwargs):
         ShipmentUpdate.objects.create(
             shipment=shipment,
             status=ShipmentStatues.PENDING,
-            location=instance.new_location
+            location=instance.new_location,
+            from_location=shipment.updates.order_by('-created_at').first().from_location,
+            to_location=shipment.updates.order_by('-created_at').first().to_location,
         )
         
     if instance.status != RescheduleStatues.PENDING:

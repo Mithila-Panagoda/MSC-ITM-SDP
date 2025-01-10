@@ -104,3 +104,23 @@ export const updateNotificationSettings = async (shipmentId: string, notificatio
         throw new Error('Failed to update notification settings');
     }
 }
+
+export const rescheduleShipment = async (id: string, rescheduleDetails: { new_delivery_date: string; new_location: string; custom_instructions: string }) => {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+    if (!accessToken) {
+        throw new Error('No access token found');
+    }
+
+    const response = await fetch(`${SHIPMENTS_URL}${id}/reschedules/`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rescheduleDetails)
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to reschedule shipment');
+    }
+}
