@@ -26,5 +26,7 @@ class ShipmentUpdateConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'status': event['status'],
             'created_at': event['created_at'],
-            'location': event['location']
+            'location': event.get('location', ''),
+            'from_location': event.get('from_location', ''),
+            'to_location': event.get('to_location', ''),
         }))

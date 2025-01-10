@@ -18,11 +18,14 @@ schema_view = swagger_get_shema_view(
         - **Parameters**:
             - `tracking_id`: The ID of the shipment to receive updates for.
         """,
+        
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="mithilapanagoda@gmail.com"),
 
     ),
+    permission_classes=(),
     public=settings.IS_SWAGGER_ENABLED,
+    
 )
 
 
