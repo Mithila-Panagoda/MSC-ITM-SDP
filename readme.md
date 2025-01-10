@@ -103,7 +103,7 @@ Before you begin, ensure you have the following installed on your machine:
     python manage.py createsuperuser
     ```
 
-8. **Collect static files:**
+8. **Collect static files:** <-- Not Requiered when running the project Locally
 
     ```bash
     python manage.py collectstatic
