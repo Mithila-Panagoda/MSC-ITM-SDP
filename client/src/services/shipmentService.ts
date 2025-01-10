@@ -1,10 +1,15 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const SHIPMENTS_URL = `${BASE_URL}/api/shipments/`;
+const ACCESS_TOKEN_KEY = 'accessToken';
+const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_BASE_URL;
+
 export const getShipments = async () => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (!accessToken) {
         throw new Error('No access token found');
     }
 
-    const response = await fetch('http://localhost:8000/api/shipments/', {
+    const response = await fetch(SHIPMENTS_URL, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -21,12 +26,12 @@ export const getShipments = async () => {
 };
 
 export const getShipment = async (id: string) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (!accessToken) {
         throw new Error('No access token found');
     }
 
-    const response = await fetch(`http://localhost:8000/api/shipments/${id}`, {
+    const response = await fetch(`${SHIPMENTS_URL}${id}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -43,7 +48,7 @@ export const getShipment = async (id: string) => {
 }
 
 export const connectShipmentWebSocket = (trackingId: string, onMessage: (update: any) => void) => {
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/shipment-updates/${trackingId}/`);
+    const ws = new WebSocket(`${WEBSOCKET_URL}/ws/shipment-updates/${trackingId}/`);
     ws.onmessage = (event) => {
         const update = JSON.parse(event.data);
         onMessage(update);
@@ -58,12 +63,12 @@ export const connectShipmentWebSocket = (trackingId: string, onMessage: (update:
 };
 
 export const getShipmentByTrackingId = async (trackingId: string) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (!accessToken) {
         throw new Error('No access token found');
     }
 
-    const response = await fetch(`http://localhost:8000/api/shipments/track/${trackingId}`, {
+    const response = await fetch(`${SHIPMENTS_URL}track/${trackingId}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -79,13 +84,14 @@ export const getShipmentByTrackingId = async (trackingId: string) => {
     return data;
 }
 
+
 export const updateNotificationSettings = async (shipmentId: string, notificationId: string, settings: any) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (!accessToken) {
         throw new Error('No access token found');
     }
 
-    const response = await fetch(`http://localhost:8000/api/shipments/${shipmentId}/notifications/${notificationId}/`, {
+    const response = await fetch(`${SHIPMENTS_URL}${shipmentId}/notifications/${notificationId}/`, {
         method: 'PATCH',
         headers: {
             Authorization: `Bearer ${accessToken}`,
