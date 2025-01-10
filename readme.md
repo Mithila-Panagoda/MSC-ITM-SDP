@@ -59,30 +59,54 @@ Before you begin, ensure you have the following installed on your machine:
     }
     ```
 
-5. **Run migrations:**
+5. **Configure the `.env` file:**
+
+    Create a `.env` file in the `backend` directory and add the following environment variables:
+
+    ```env
+    DB_ENGINE="django.db.backends.postgresql"
+
+    # Local database configuration
+    DATABASE_NAME="ITM_SDP_Assignment"
+    DATABASE_USER="postgres"
+    DATABASE_PWD="root"
+    DATABASE_HOST="localhost"
+    DATABASE_PORT="5432"
+
+    ENV="development"
+    ENVIRONMENT="development"
+    WEBAPP_URL="http://localhost:3000"
+
+    # Swagger
+    IS_SWAGGER_ENABLED=true
+    SWAGGER_ADMIN_LOGIN_ENABLED=true
+
+    # Email Service
+    DJANGO_EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
+    DJANGO_EMAIL_HOST="smtp.gmail.com"
+    DJANGO_EMAIL_PORT=587
+    DJANGO_EMAIL_HOST_USER="your_email@gmail.com"
+    DJANGO_EMAIL_HOST_PASSWORD="your_email_password"
+    ```
+
+    The `DJANGO_EMAIL_HOST_USER` and `DJANGO_EMAIL_HOST_PASSWORD` are mandatory for the email service to work.
+
+6. **Run migrations:**
 
     ```bash
     python manage.py migrate
     ```
 
-6. **Create a superuser:**
+7. **Create a superuser:**
 
     ```bash
     python manage.py createsuperuser
     ```
 
-7. **Collect static files:**
+8. **Collect static files:**
 
     ```bash
     python manage.py collectstatic
-    ```
-
-8. **Configure the email service:**
-
-    To send emails to recipients without printing them on the console (for development work), add the following to your `.env` file:
-
-    ```env
-    DJANGO_EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
     ```
 
 ## Frontend Setup
@@ -166,6 +190,21 @@ Before you begin, ensure you have the following installed on your machine:
 ### Rescheduling Shipments
 
 - If a shipment delivery is missed, use the reschedule form to provide new delivery details and submit the request.
+
+### Django Admin Dashboard
+
+The client frontend does not perform actions such as creating customer accounts, creating shipment updates, or accepting/rejecting reschedules. These actions should be performed using the Django admin dashboard.
+
+- **Creating Customer Accounts:**
+  - Navigate to the Django admin dashboard at `http://localhost:8000/admin/`.
+  - Log in with your superuser credentials.
+  - Use the interface to create new customer accounts.
+
+- **Creating Shipment Updates:**
+  - Use the Django admin dashboard to create and manage shipment updates.
+
+- **Accepting or Rejecting Reschedules:**
+  - Use the Django admin dashboard to review and manage reschedule requests.
 
 ## API Documentation
 
