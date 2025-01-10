@@ -25,6 +25,7 @@ def create_reschedule(shipment: Shipment, reschedule_data: dict) -> Reschedule:
             'new_delivery_date': reschedule_data['new_delivery_date'],
             'custom_instructions': reschedule_data.get('custom_instructions'),
             'new_location': reschedule_data.get('new_location',shipment_update.location),
+            'admin_response':"",
             'status': RescheduleStatues.PENDING
         }
     )
