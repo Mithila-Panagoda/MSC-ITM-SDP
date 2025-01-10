@@ -1,5 +1,11 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+console.log("BASE_URL: " + BASE_URL);
+const LOGIN_URL = `${BASE_URL}/api/users/login/`;
+const ACCESS_TOKEN_KEY = 'accessToken';
+const REFRESH_TOKEN_KEY = 'refreshToken';
+
 export const login = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:8000/api/users/login/', {
+    const response = await fetch(LOGIN_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -13,15 +19,14 @@ export const login = async (email: string, password: string) => {
 
     const data = await response.json();
     const { access, refresh } = data;
-    console.log("access token: " + access);
     // Save tokens to localStorage
-    localStorage.setItem('accessToken', access);
-    localStorage.setItem('refreshToken', refresh);
+    localStorage.setItem(ACCESS_TOKEN_KEY, access);
+    localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
 
     // Set a timeout to log out the user after an hour
     setTimeout(() => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
         // Optionally, redirect to login page or show a message
         window.location.href = '/login';
     }, 3600000); // 1 hour in milliseconds
@@ -30,6 +35,6 @@ export const login = async (email: string, password: string) => {
 };
 
 export const isAuthenticated = () => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     return !!accessToken;
 };

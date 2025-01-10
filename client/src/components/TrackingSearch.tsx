@@ -14,7 +14,6 @@ export const TrackingSearch = () => {
     if (trackingId) {
       try {
         const shipment = await getShipmentByTrackingId(trackingId);
-        console.log("shipment", shipment);
         if (shipment) {
           navigate(`/shipment/${shipment.id}`);
         } else {

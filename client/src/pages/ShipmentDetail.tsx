@@ -35,6 +35,14 @@ const ShipmentDetail = () => {
   }, [id]);
 
   useEffect(() => {
+    if (isWebSocketActive) {
+      if (import.meta.env.VITE_WEBSOCKET_ENABLED === 'false') {
+      alert("Real-time updates are not available at the moment.");
+      setIsWebSocketActive(false);
+      return;
+      }
+    }
+
     if (isWebSocketActive && shipmentDetails) {
       ws.current = connectShipmentWebSocket(shipmentDetails.tracking_id, (update) => {
         setShipmentDetails((prevDetails) => ({

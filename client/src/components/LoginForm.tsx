@@ -15,7 +15,6 @@ export const LoginForm = () => {
     if (email && password) {
       try {
         const user = await login(email, password);
-        console.log('Login successful:', user);
         toast({
           title: "Login successful",
           description: "Welcome back!",
