@@ -42,7 +42,7 @@ def prep_email_for_shipment_status_update(shipment: Shipment, shipment_update: S
         'customer_name': f'{shipment.customer.first_name} {shipment.customer.last_name}',
         'shipment_status': shipment_update.status,
         'tracking_id': shipment.tracking_id,
-        'tracking_url': f'{settings.WEBAPP_URL}/track/{shipment.tracking_id}',
+        'tracking_url': f'{settings.WEBAPP_URL}/shipment/{shipment.id}',
         'privacy_policy_url': 'https://example.com/privacy-policy',
         'contact_url': 'https://example.com/contact',
     }
