@@ -32,7 +32,8 @@ def update_shipment_status(sender, instance, **kwargs):
             'type': 'shipment_update',
             'status': instance.status,
             'created_at': instance.created_at.isoformat(),
-            'location': instance.location,
+            'from_location': instance.from_location if instance.from_location else '',
+            'to_location': instance.to_location if instance.to_location else '',
         }
     )
     

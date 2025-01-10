@@ -45,6 +45,8 @@ class Shipment(models.Model):
 class ShipmentUpdate(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     shipment = models.ForeignKey(Shipment, on_delete=models.CASCADE, related_name='updates')
+    from_location = models.CharField(max_length=100, blank=True,null=True)
+    to_location = models.CharField(max_length=100, blank=True,null=True)
     status = models.CharField(max_length=20, choices=ShipmentStatues.choices)
     location = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
