@@ -112,7 +112,7 @@ class NotificationViewSet(ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        notification_instance = get_object_or_404(Notification, id=kwargs.get('shipment_pk'))
+        notification_instance = get_object_or_404(Notification, shipment=kwargs.get('shipment_pk'),id=kwargs.get('pk'))
         if notification_instance.shipment.customer != request.user:
             raise APIException("You are not authorized to update this notification method")
         result = update_notification_methods(notification_instance, serializer.validated_data)
