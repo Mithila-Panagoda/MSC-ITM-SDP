@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { getShipment, connectShipmentWebSocket } from "@/services/shipmentService"; // Import the getShipment and connectShipmentWebSocket functions
+import { getShipment, connectShipmentWebSocket, updateNotificationSettings } from "@/services/shipmentService"; // Import the getShipment and connectShipmentWebSocket functions
 
 const ShipmentDetail = () => {
   const { id } = useParams();
@@ -16,6 +16,7 @@ const ShipmentDetail = () => {
     send_sms: false,
     send_push_notification: false,
   });
+  const [hasChanges, setHasChanges] = useState(false);
   const [isWebSocketActive, setIsWebSocketActive] = useState(false);
   const ws = useRef<WebSocket | null>(null);
 
@@ -52,10 +53,24 @@ const ShipmentDetail = () => {
 
   const handleNotificationChange = (type: "send_email" | "send_sms" | "send_push_notification", checked: boolean) => {
     setNotifications((prev) => ({ ...prev, [type]: checked }));
-    toast({
-      title: "Notification preferences updated",
-      description: `${type.replace('_', ' ')} notifications have been ${checked ? 'enabled' : 'disabled'}`,
-    });
+    setHasChanges(true);
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      await updateNotificationSettings(id, shipmentDetails.notifications.id, notifications); // Assuming notificationId is available
+      setHasChanges(false);
+      toast({
+        title: "Notification preferences updated",
+        description: "Your notification preferences have been saved.",
+      });
+    } catch (error) {
+      console.error("Failed to update notification settings:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update notification settings.",
+      });
+    }
   };
 
   if (!shipmentDetails) {
@@ -123,6 +138,14 @@ const ShipmentDetail = () => {
                   <Label htmlFor="push-notifications">Push Notifications</Label>
                 </div>
               </div>
+              {hasChanges && (
+                <button
+                  onClick={handleSaveChanges}
+                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+                >
+                  Save Changes
+                </button>
+              )}
             </div>
 
             <Separator />

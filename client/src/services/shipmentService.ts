@@ -78,3 +78,23 @@ export const getShipmentByTrackingId = async (trackingId: string) => {
     const data = await response.json();
     return data;
 }
+
+export const updateNotificationSettings = async (shipmentId: string, notificationId: string, settings: any) => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        throw new Error('No access token found');
+    }
+
+    const response = await fetch(`http://localhost:8000/api/shipments/${shipmentId}/notifications/${notificationId}/`, {
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(settings)
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to update notification settings');
+    }
+}
