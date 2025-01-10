@@ -2,6 +2,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet,ModelViewSet,ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import APIException
+from rest_framework.decorators import action
 
 from .models import(
     Shipment,
@@ -42,6 +43,13 @@ class ShipmentViewSet(ReadOnlyModelViewSet):
     
     def get_queryset(self):
         return Shipment.objects.filter(customer=self.request.user).order_by('-created_at')
+    
+    @action(detail=False, methods=['get'], url_path='track/(?P<tracking_id>[^/.]+)')
+    def get_shipment_by_tracking_id(self,request, tracking_id):
+        response = Shipment.objects.filter(tracking_id=tracking_id).first()
+        if not response:
+            raise APIException("Shipment not found")
+        return Response(ShipmentDetailSerializer(response).data, status=status.HTTP_200_OK)
     
 class ShipmentUpdateViewSet(ReadOnlyModelViewSet):
     queryset = ShipmentUpdate.objects.all()

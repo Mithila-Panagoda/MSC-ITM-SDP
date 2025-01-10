@@ -56,3 +56,25 @@ export const connectShipmentWebSocket = (trackingId: string, onMessage: (update:
     };
     return ws;
 };
+
+export const getShipmentByTrackingId = async (trackingId: string) => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        throw new Error('No access token found');
+    }
+
+    const response = await fetch(`http://localhost:8000/api/shipments/track/${trackingId}`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch shipment');
+    }
+
+    const data = await response.json();
+    return data;
+}

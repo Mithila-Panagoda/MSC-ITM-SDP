@@ -2,16 +2,36 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import { getShipmentByTrackingId } from "@/services/shipmentService";
+import { toast } from "@/components/ui/use-toast";
 
 export const TrackingSearch = () => {
   const [trackingId, setTrackingId] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (trackingId) {
-      navigate(`/shipment/${trackingId}`);
+      try {
+        const shipment = await getShipmentByTrackingId(trackingId);
+        console.log("shipment", shipment);
+        if (shipment) {
+          navigate(`/shipment/${shipment.id}`);
+        } else {
+          showErrorToast("Tracking ID is incorrect");
+        }
+      } catch (error) {
+        console.error("Failed to fetch shipment:", error);
+        showErrorToast("Tracking ID is incorrect");
+      }
     }
+  };
+
+  const showErrorToast = (message: string) => {
+    toast({
+      title: "Tracking ID Not Found",
+      description: "Please check the tracking ID and try again",
+    });
   };
 
   return (
