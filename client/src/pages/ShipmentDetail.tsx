@@ -127,7 +127,7 @@ const ShipmentDetail = () => {
           </Badge> */}
           <button
             onClick={() => setIsWebSocketActive((prev) => !prev)}
-            className="ml-4 px-4 py-2 bg-blue-500 text-white rounded"
+            className="ml-4 px-4 py-2 bg-emerald-700 text-white rounded"
           >
             {isWebSocketActive ? "Disable" : "Enable"} Real-Time Updates
           </button>

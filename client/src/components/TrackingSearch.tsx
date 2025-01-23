@@ -42,7 +42,7 @@ export const TrackingSearch = () => {
         onChange={(e) => setTrackingId(e.target.value)}
         className="flex-1"
       />
-      <Button type="submit" className="bg-secondary hover:bg-secondary/90">
+      <Button type="submit" className="bg-emerald-700 hover:bg-emerald-600/90">
         Track
       </Button>
     </form>

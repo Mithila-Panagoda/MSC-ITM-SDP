@@ -21,15 +21,15 @@ export const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
       case 'PENDING':
         return 'bg-gray-500';
       case 'CONFIRMED':
-        return 'bg-blue-500';
+        return 'bg-sky-700';
       case 'SHIPPED':
-        return 'bg-purple-500';
+        return 'bg-sky-700';
       case 'IN_TRANSIT':
         return 'bg-orange-500';
       case 'DELIVERED':
-        return 'bg-green-500';
+        return 'bg-teal-700';
       case 'DELIVERY_MISSED':
-        return 'bg-red-500';
+        return 'bg-red-700';
       default:
         return 'bg-gray-500';
     }
