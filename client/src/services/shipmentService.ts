@@ -121,6 +121,10 @@ export const rescheduleShipment = async (id: string, rescheduleDetails: { new_de
     });
 
     if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.new_delivery_date) {
+            throw new Error(`Failed to reschedule shipment: ${errorData.new_delivery_date.join(', ')}`);
+        }
         throw new Error('Failed to reschedule shipment');
     }
 }
