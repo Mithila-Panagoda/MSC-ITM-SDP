@@ -10,6 +10,7 @@ import { getShipment, connectShipmentWebSocket, updateNotificationSettings, resc
 import Modal from "@/components/ui/Modal"; // Import Modal, Button, and Input components
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { isAuthenticated, logout } from "@/services/userService"; // Import isAuthenticated and logout functions
 
 const ShipmentDetail = () => {
   const { id } = useParams();
@@ -28,6 +29,11 @@ const ShipmentDetail = () => {
     new_location: "",
     custom_instructions: "",
   });
+  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
+
+  const handleLogout = () => {
+    logout();
+  };
 
   useEffect(() => {
     const fetchShipmentDetails = async () => {
@@ -122,9 +128,15 @@ const ShipmentDetail = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-primary">Shipment Details</h1>
-          {/* <Badge variant="secondary" className="capitalize">
-            {shipmentDetails.status.toLowerCase().replace('_', ' ')}
-          </Badge> */}
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded">
+              Logout
+            </button>
+          ) : (
+            <a href="/login" className="px-4 py-2 bg-blue-600 text-white rounded">
+              Login
+            </a>
+          )}
           <button
             onClick={() => setIsWebSocketActive((prev) => !prev)}
             className="ml-4 px-4 py-2 bg-emerald-700 text-white rounded"
