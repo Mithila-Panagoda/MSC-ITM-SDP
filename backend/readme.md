@@ -4,6 +4,7 @@ This project is the backend part of the web application for managing and trackin
 
 ## Table of Contents
 
+- [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Running the Application](#running-the-application)
@@ -12,6 +13,34 @@ This project is the backend part of the web application for managing and trackin
 - [Email Service](#email-service)
 - [API Documentation](#api-documentation)
 - [License](#license)
+
+## Project Structure
+
+The project structure is as follows:
+
+```
+backend/
+├── apps/                   # Django apps
+│   ├── shipments/          # Shipments app
+│   │   ├── migrations/     # Database migrations
+│   │   ├── models.py       # Database models
+│   │   ├── views.py        # API views
+│   │   ├── serializers.py  # Serializers for API
+│   │   ├── urls.py         # URL routing
+│   │   ├── services.py     # Business logic
+│   │   ├── holidays.py     # Holiday logic
+│   │   └── ...             # Other files
+│   └── ...                 # Other apps
+├── project/                # Project settings
+│   ├── settings.py         # Django settings
+│   ├── urls.py             # Project URL routing
+│   ├── asgi.py             # ASGI configuration
+│   ├── wsgi.py             # WSGI configuration
+│   └── ...                 # Other files
+├── manage.py               # Django management script
+├── requirements.txt        # Project dependencies
+└── ...                     # Other files
+```
 
 ## Prerequisites
 

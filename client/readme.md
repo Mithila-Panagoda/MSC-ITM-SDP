@@ -4,14 +4,37 @@ This project is the frontend part of the web application for managing and tracki
 
 ## Table of Contents
 
+- [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Running the Application](#running-the-application)
 - [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
 - [Available Scripts](#available-scripts)
 - [Usage](#usage)
 - [License](#license)
+
+## Project Structure
+
+The project structure is as follows:
+
+```
+client/
+├── public/                 # Static assets
+├── src/                    # Source code
+│   ├── assets/             # Images, fonts, etc.
+│   ├── components/         # Reusable components
+│   ├── pages/              # Page components
+│   ├── services/           # API service functions
+│   ├── store/              # Redux store and slices
+│   ├── styles/             # Global styles
+│   ├── App.jsx             # Main App component
+│   ├── main.jsx            # Entry point
+│   └── ...                 # Other files
+├── .env                    # Environment variables
+├── index.html              # HTML template
+├── package.json            # Project dependencies and scripts
+└── vite.config.js          # Vite configuration
+```
 
 ## Prerequisites
 
@@ -75,29 +98,6 @@ Example `.env` file:
 VITE_API_BASE_URL=http://localhost:8000
 VITE_WEBSOCKET_BASE_URL=ws://localhost:8000
 VITE_WEBSOCKET_ENABLED=true
-```
-
-## Project Structure
-
-The project structure is as follows:
-
-```
-client/
-├── public/                 # Static assets
-├── src/                    # Source code
-│   ├── assets/             # Images, fonts, etc.
-│   ├── components/         # Reusable components
-│   ├── pages/              # Page components
-│   ├── services/           # API service functions
-│   ├── store/              # Redux store and slices
-│   ├── styles/             # Global styles
-│   ├── App.jsx             # Main App component
-│   ├── main.jsx            # Entry point
-│   └── ...                 # Other files
-├── .env                    # Environment variables
-├── index.html              # HTML template
-├── package.json            # Project dependencies and scripts
-└── vite.config.js          # Vite configuration
 ```
 
 ## Available Scripts
