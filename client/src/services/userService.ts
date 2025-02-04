@@ -38,3 +38,9 @@ export const isAuthenticated = () => {
     const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     return !!accessToken;
 };
+
+export const logout = () => {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    window.location.href = '/login';
+};
