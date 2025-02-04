@@ -114,7 +114,7 @@ const ShipmentDetail = () => {
       console.error("Failed to reschedule shipment:", error);
       toast({
         title: "Error",
-        description: "Failed to reschedule shipment.",
+        description: error.message,
       });
     }
   };

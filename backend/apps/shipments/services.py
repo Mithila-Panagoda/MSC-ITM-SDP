@@ -13,20 +13,34 @@ from django.conf import settings
 from rest_framework.exceptions import APIException
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import datetime
+from .holidays import is_public_or_mercantile_holiday
 
 def create_reschedule(shipment: Shipment, reschedule_data: dict) -> Reschedule:
     if shipment.status != ShipmentStatues.DELIVERY_MISSED:
         raise APIException("Can only reschedule missed deliveries.")
 
+    new_delivery_date = reschedule_data['new_delivery_date']
+    is_holiday, holiday_reason = is_public_or_mercantile_holiday(new_delivery_date)
+    if new_delivery_date.weekday() == 6:
+        admin_response = "Reschedule rejected: Deliveries not made on Sunday."
+        status = RescheduleStatues.REJECTED
+    elif is_holiday:
+        admin_response = f"Reschedule rejected: New delivery date falls on a public/mercantile holiday ({holiday_reason})."
+        status = RescheduleStatues.REJECTED
+    else:
+        admin_response = "Reschedule accepted."
+        status = RescheduleStatues.ACCEPTED
+
     shipment_update = shipment.updates.order_by('-created_at').first()
     reschedule, created = Reschedule.objects.update_or_create(
         shipment=shipment,
         defaults={
-            'new_delivery_date': reschedule_data['new_delivery_date'],
+            'new_delivery_date': new_delivery_date,
             'custom_instructions': reschedule_data.get('custom_instructions'),
-            'new_location': reschedule_data.get('new_location',shipment_update.location),
-            'admin_response':"",
-            'status': RescheduleStatues.PENDING
+            'new_location': reschedule_data.get('new_location', shipment_update.location),
+            'admin_response': admin_response,
+            'status': status
         }
     )
     return reschedule

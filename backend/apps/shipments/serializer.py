@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from datetime import datetime, timedelta
 from .models import (
     Shipment,
     ShipmentUpdate,
@@ -44,7 +45,14 @@ class ShipmentSerializer(serializers.ModelSerializer):
 class CreateRescheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reschedule
-        fields = ['new_delivery_date', 'custom_instructions','new_location']
+        fields = ['new_delivery_date', 'custom_instructions', 'new_location']
+
+    def validate_new_delivery_date(self, value):
+        if value <= datetime.now().date():
+            raise serializers.ValidationError("The new delivery date must be a future date.")
+        if value > (datetime.now().date() + timedelta(days=30)):
+            raise serializers.ValidationError("The new delivery date must not exceed one month from today.")
+        return value
         
 class NotificationMessageSerializer(serializers.ModelSerializer):
     class Meta:
